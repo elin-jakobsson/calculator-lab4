@@ -73,7 +73,8 @@
         data: {
           history: '',
           inputValue: '',
-          currentValue: 0
+          currentValue: 0,
+          minusSign:0
           // plus: '+'
 
 
@@ -83,6 +84,14 @@
         // data
         methods: {
 
+          resetValues:function(event){
+            if (this.inputValue.length === 0 && this.minusSign === 1) {
+              console.log('change function');
+              console.log('minusSign is 1');
+              this.minusSign = 0;
+            }
+          },
+
           validateNum: function(evt) {;
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode; // Use either which or keyCode, depending on browser support
@@ -91,27 +100,28 @@
             // if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
             //   evt.preventDefault();;
             // }
-            console.log(charCode);
+          //  console.log(charCode);
+          console.log('input '+this.inputValue.length);
+          console.log('minusval '+ this.minusSign);
+          // if (this.inputValue === '') {
+          //   if (this.minusSign === 1) {
+          //     console.log('minus is 1');
+          //     //  this.minusSign = 0;
+          //
+          //   }
+          //   console.log(this.minusSign);
+          //   console.log('emty');
+          // }
             if (charCode > 47 && charCode < 58  || charCode === 45) {
-              if (this.inputValue == '' && charCode === 45) {
-                console.log('inputval'+this.inputValue.value);
-                if (this.inputValue === '-') {
-                  evt.preventDefault();
-                
-
-                }else
+              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45) {
+                this.minusSign = 1;
                 return true;
-                evt.preventDefault();
               }else if (charCode > 47 && charCode < 58) {
-                console.log('true key');
-
-                console.log(this.inputValue.value);
                 return true;
               }else {
                 evt.preventDefault();
               }
             } else {
-              console.log('false key');
               evt.preventDefault();
             }
           },
@@ -137,7 +147,7 @@
 <body>
   <div class="rootDiv" id="root">
     <p>{{history}}</p>
-    <input v-model.number='inputValue' @keypress="validateNum(event)" type="number" name="" :value="inputValue">
+    <input v-model='inputValue' @change='resetValues(event)' @keypress="validateNum(event)" type="number" name="" :value="inputValue">
 
     <div class="buttonContainer">
       <div class="row1">
