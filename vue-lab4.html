@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Miniräknare</title>
+
+  <style>
+    html * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+    }
+
+    button {
+      width: 22%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+
+      border-radius: 5px;
+    }
+
+    .num {
+      background-color: #f4f4f4;
+    }
+
+    .equal {
+      background-color: powderblue;
+    }
+
+    input {
+      height: 3rem;
+      padding: 5px;
+      font-size: 1.5rem;
+      width: 100%;
+    }
+
+    .rootDiv {
+      margin: 0.5rem;
+      width: 500px;
+      min-width: 235px;
+    }
+
+    .buttonContainer {
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .buttonContainer>div {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    window.addEventListener('load', () => {
+
+      new Vue({
+        el: '#root',
+        data: {
+          history: '',
+          inputValue: '',
+          currentValue: 0
+          // plus: '+'
+
+
+        },
+        // computed:{
+        //   equals:
+        // data
+        methods: {
+
+          validateNum: function(evt) {;
+            evt = (evt) ? evt : window.event;
+            let charCode = (evt.which) ? evt.which : evt.keyCode; // Use either which or keyCode, depending on browser support
+
+            //let charCode = event.which || event.keyCode;
+            // if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+            //   evt.preventDefault();;
+            // }
+            console.log(charCode);
+            if (charCode > 47 && charCode < 58  || charCode === 45) {
+              if (this.inputValue == '' && charCode === 45) {
+                console.log('inputval'+this.inputValue.value);
+                if (this.inputValue === '-') {
+                  evt.preventDefault();
+                }else
+                return true;
+                evt.preventDefault();
+              }else if (charCode > 47 && charCode < 58) {
+                console.log('true key');
+
+                console.log(this.inputValue.value);
+                return true;
+              }else {
+                evt.preventDefault();
+              }
+            } else {
+              console.log('false key');
+              evt.preventDefault();
+            }
+          },
+
+          equals: function(event) {
+
+            console.log(event.type);
+            //this.inputValue = split('+')
+            //  this.inputValue = Number(this.inputValue);
+            console.log(this.inputValue);
+            console.log(typeof this.inputValue);
+          }
+
+
+        } // Methods
+      }); // Vue
+
+
+    }); // window load
+  </script>
+</head>
+
+<body>
+  <div class="rootDiv" id="root">
+    <p>{{history}}</p>
+    <input v-model.number='inputValue' @keypress="validateNum(event)" type="number" name="" :value="inputValue">
+
+    <div class="buttonContainer">
+      <div class="row1">
+        <button type="button" name="button">&times;&#178;</button>
+        <button type="button" name="button">&#8730;</button>
+        <button type="button" name="button">&#8678;</button>
+        <button @click='inputValue = ""' type="button" name="button">Clear</button>
+      </div>
+      <div class="row2">
+        <button @click='inputValue += "1"' class="num" type="button" name="button">1</button>
+        <button @click='inputValue += "2"' class="num" type="button" name="button">2</button>
+        <button @click='inputValue += "3"' class="num" type="button" name="button">3</button>
+        <button type="button" name="button">&#247;</button>
+      </div>
+      <div class="row3">
+        <button @click='inputValue += "4"' class="num" type="button" name="button">4</button>
+        <button @click='inputValue += "5"' class="num" type="button" name="button">5</button>
+        <button @click='inputValue += "6"' class="num" type="button" name="button">6</button>
+        <button type="button" name="button">&#8722;</button>
+      </div>
+      <div class="row4">
+        <button @click='inputValue += "7"' class="num" type="button" name="button">7</button>
+        <button @click='inputValue += "8"' class="num" type="button" name="button">8</button>
+        <button @click='inputValue += "9"' class="num" type="button" name="button">9</button>
+        <button type="button" name="button">&#215;</button>
+      </div>
+      <div class="row4">
+        <button type="button" name="button">.</button>
+        <button @click='inputValue += "0"' class="num" type="button" name="button">0</button>
+        <button @click='equals' class="equal" type="button" name="button">&#61;</button>
+        <button type="button" name="button">&#43;</button>
+      </div>
+
+    </div>
+
+    <!-- <button type="button" name="button">x^2</button>
+      <button type="button" name="button">root</button>
+      <br>
+      <button type="button" name="button">clear</button>
+      <button type="button" name="button">=</button> -->
+
+
+  </div>
+
+</body>
+
+</html>
