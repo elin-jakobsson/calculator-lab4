@@ -74,57 +74,43 @@
           history: '',
           inputValue: '',
           currentValue: 0,
-          minusSign:0
+          minusSign: 0
+
           // plus: '+'
 
 
-        },
-        // computed:{
-        //   equals:
-        // data
+        },  // data
+
         methods: {
-
-          resetValues:function(event){
-            if (this.inputValue.length === 0 && this.minusSign === 1) {
-              console.log('change function');
-              console.log('minusSign is 1');
-              this.minusSign = 0;
-            }
-          },
-
           validateNum: function(evt) {;
             evt = (evt) ? evt : window.event;
-            let charCode = (evt.which) ? evt.which : evt.keyCode; // Use either which or keyCode, depending on browser support
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
+            /* Use either which or keyCode, depending on browser support,
+            here we chech wich one of them that is true*/
 
-            //let charCode = event.which || event.keyCode;
-            // if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-            //   evt.preventDefault();;
-            // }
-          //  console.log(charCode);
-          console.log('input '+this.inputValue.length);
-          console.log('minusval '+ this.minusSign);
-          // if (this.inputValue === '') {
-          //   if (this.minusSign === 1) {
-          //     console.log('minus is 1');
-          //     //  this.minusSign = 0;
-          //
-          //   }
-          //   console.log(this.minusSign);
-          //   console.log('emty');
-          // }
-            if (charCode > 47 && charCode < 58  || charCode === 45) {
-              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45) {
+            // if input is emty enable minusSign again
+            // this only works if the input type is text, cant count length with type number
+            if (this.minusSign === 1 && this.inputValue == '') {
+              this.minusSign = 0;
+            }
+
+            // validate which buttons that should work or not
+            if (charCode > 47 && charCode < 58 || charCode === 45) {
+              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45) {   // The minus (-) sign should only be possible as a first character
                 this.minusSign = 1;
                 return true;
-              }else if (charCode > 47 && charCode < 58) {
+              } else if (charCode > 47 && charCode < 58) {
+                console.log('true key ', charCode);
                 return true;
-              }else {
+              } else {
                 evt.preventDefault();
+                console.log('false key ', charCode);
               }
             } else {
+              console.log('false key ', charCode);
               evt.preventDefault();
             }
-          },
+          }, // validateNum
 
           equals: function(event) {
 
@@ -134,8 +120,6 @@
             console.log(this.inputValue);
             console.log(typeof this.inputValue);
           }
-
-
         } // Methods
       }); // Vue
 
@@ -147,7 +131,7 @@
 <body>
   <div class="rootDiv" id="root">
     <p>{{history}}</p>
-    <input v-model='inputValue' @change='resetValues(event)' @keypress="validateNum(event)" type="number" name="" :value="inputValue">
+    <input v-model='inputValue' @keypress="validateNum(event)" type="text" name="" :value="inputValue">
 
     <div class="buttonContainer">
       <div class="row1">
