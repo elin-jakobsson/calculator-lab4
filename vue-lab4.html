@@ -74,12 +74,13 @@
           history: '',
           inputValue: '',
           currentValue: 0,
-          minusSign: 0
+          minusSign: 0,
+          dotSign: 0
 
           // plus: '+'
 
 
-        },  // data
+        }, // data
 
         methods: {
           validateNum: function(evt) {;
@@ -94,11 +95,22 @@
               this.minusSign = 0;
             }
 
+            if (this.dotSign === 1 && this.inputValue.indexOf(".") === -1) {
+              this.dotSign = 0;
+            }
+
             // validate which buttons that should work or not
-            if (charCode > 47 && charCode < 58 || charCode === 45) {
-              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45) {   // The minus (-) sign should only be possible as a first character
+            if (charCode > 47 && charCode < 58 || charCode === 45 || charCode === 46) {
+              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45 && this.history.endsWith("-") !== true) { // The minus (-) sign should only be possible as a first character
                 this.minusSign = 1;
                 return true;
+              } else if (this.dotSign === 0 && this.inputValue.indexOf(".") === -1 && this.inputValue !== '' && charCode === 46) {
+                if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) { // The dot (.) sign should only be possible as a second character
+                  evt.preventDefault();
+                } else {
+                  this.dotSign = 1;
+                  return true;
+                }
               } else if (charCode > 47 && charCode < 58) {
                 console.log('true key ', charCode);
                 return true;
@@ -112,6 +124,52 @@
             }
           }, // validateNum
 
+          minusButton:function(){
+            if (this.minusSign === 1 && this.inputValue == '') {
+              this.dotSign = 0;
+
+            }
+            if (this.minusSign === 0 &&  this.inputValue == '') {
+              this.minusSign = 1;
+              this.inputValue += '-';
+            }
+
+            if (this.inputValue.length> 0 && this.inputValue.indexOf("-") === -1 ||  this.inputValue.indexOf("-") === 0 && this.inputValue.length > 1) {
+              this.history += this.inputValue + '-';
+              let get = this.history.substring(0, this.history.length - 1)
+              let count = eval(get); //The eval() function evaluates or executes an argument. works on strings and make shore that the string comes from a trusted source.
+              console.log(this.history);
+              console.log(get);
+              this.inputValue = count;
+            }
+
+          }, // minusButton
+          dotButton: function() {
+            if (this.dotSign === 1 && this.inputValue.indexOf(".") === -1) {
+              this.dotSign = 0;
+            }
+            if (this.dotSign === 0 && this.inputValue.indexOf(".") === -1 && this.inputValue !== '') {
+              if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
+              } else {
+                this.dotSign = 1;
+                this.inputValue += '.';
+              }
+            }
+          }, // dotButton
+          clear:function(){
+            this.history = "";
+            this.inputValue = "";
+          },
+
+          calculate: function() {
+            console.log(this.inputValue);
+            if (this.inputValue !== '') {
+              console.log('divide');
+
+            } else {
+              console.log('no value');
+            }
+          },
           equals: function(event) {
 
             console.log(event.type);
@@ -130,7 +188,7 @@
 
 <body>
   <div class="rootDiv" id="root">
-    <p>{{history}}</p>
+    <p>{{history}}</p> <br>
     <input v-model='inputValue' @keypress="validateNum(event)" type="text" name="" :value="inputValue">
 
     <div class="buttonContainer">
@@ -138,31 +196,31 @@
         <button type="button" name="button">&times;&#178;</button>
         <button type="button" name="button">&#8730;</button>
         <button type="button" name="button">&#8678;</button>
-        <button @click='inputValue = ""' type="button" name="button">Clear</button>
+        <button @click='clear' type="button" name="button">Clear</button>
       </div>
       <div class="row2">
         <button @click='inputValue += "1"' class="num" type="button" name="button">1</button>
         <button @click='inputValue += "2"' class="num" type="button" name="button">2</button>
         <button @click='inputValue += "3"' class="num" type="button" name="button">3</button>
-        <button type="button" name="button">&#247;</button>
+        <button @click='calculate' type="button" name="button">&#247;</button>
       </div>
       <div class="row3">
         <button @click='inputValue += "4"' class="num" type="button" name="button">4</button>
         <button @click='inputValue += "5"' class="num" type="button" name="button">5</button>
         <button @click='inputValue += "6"' class="num" type="button" name="button">6</button>
-        <button type="button" name="button">&#8722;</button>
+        <button @click='minusButton' type="button" name="button">&#8722;</button>
       </div>
       <div class="row4">
         <button @click='inputValue += "7"' class="num" type="button" name="button">7</button>
         <button @click='inputValue += "8"' class="num" type="button" name="button">8</button>
         <button @click='inputValue += "9"' class="num" type="button" name="button">9</button>
-        <button type="button" name="button">&#215;</button>
+        <button @click='calculate' type="button" name="button">&#215;</button>
       </div>
       <div class="row4">
-        <button type="button" name="button">.</button>
+        <button @click='dotButton' type="button" name="button">.</button>
         <button @click='inputValue += "0"' class="num" type="button" name="button">0</button>
         <button @click='equals' class="equal" type="button" name="button">&#61;</button>
-        <button type="button" name="button">&#43;</button>
+        <button @click='calculate' type="button" name="button">&#43;</button>
       </div>
 
     </div>
