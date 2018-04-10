@@ -76,7 +76,8 @@
           inputPlaceholder: '',
           currentValue: '',
           minusSign: 0,
-          dotSign: 0
+          dotSign: 0,
+          previousSign: ''
 
           // plusButton: '+'
 
@@ -85,6 +86,15 @@
 
         methods: {
           validateNum: function(evt) {;
+
+            if (this.previousSign === '=') {
+              this.history = '';
+              this.inputValue = '';
+              this.currentValue = '';
+              this.previousSign = '';
+              this.minusSign = 0;
+            }
+
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
             /* Use either which or keyCode, depending on browser support,
@@ -102,9 +112,15 @@
 
             // validate which buttons that should work or not
             if (charCode > 47 && charCode < 58 || charCode === 45 || charCode === 46) {
-              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45 && this.history.endsWith("-") !== true) { // The minus (-) sign should only be possible as a first character
+              if (this.minusSign === 0 && this.inputValue == '' && charCode === 45 &&
+                this.history.endsWith("-") !== true &&
+                this.history.endsWith("+") !== true &&
+                this.history.endsWith("/") !== true &&
+                this.history.endsWith("*") !== true) { // The minus (-) sign should only be possible as a first character
+
                 this.minusSign = 1;
                 return true;
+
               } else if (this.dotSign === 0 && this.inputValue.indexOf(".") === -1 && this.inputValue !== '' && charCode === 46) {
                 if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) { // The dot (.) sign should only be possible as a second character
                   evt.preventDefault();
@@ -126,27 +142,54 @@
           }, // validateNum
 
           minusButton: function() {
-            if (this.minusSign === 1 && this.inputValue == '') {
-              this.dotSign = 0;
+            console.log(this.minusSign);
+            if (this.minusSign === 1 && this.inputValue === '') {
+              this.minusSign = 0;
 
             }
             if (this.minusSign === 0 && this.inputValue == '' &&
-                this.history.endsWith("-") !== true &&
-                this.history.endsWith("+") !== true &&
-                this.history.endsWith("/") !== true &&
-                this.history.endsWith("*") !== true) {
+              this.history.endsWith("-") !== true &&
+              this.history.endsWith("+") !== true &&
+              this.history.endsWith("/") !== true &&
+              this.history.endsWith("*") !== true) {
               this.minusSign = 1;
               this.inputValue += '-';
             }
 
             if (this.inputValue.length > 0 && this.inputValue.indexOf("-") === -1 || this.inputValue.indexOf("-") === 0 && this.inputValue.length > 1) {
               this.history += this.inputValue + '-';
-              let get = this.history.substring(0, this.history.length - 1)
-              let count = eval(get); //The eval() function evaluates or executes an argument. works on strings and make shore that the string comes from a trusted source.
-              console.log(this.history);
-              console.log(get);
-              this.inputValue = '',
-                this.inputPlaceholder = count;
+
+              if (this.currentValue !== '') {
+                let val = this.currentValue + this.previousSign + this.inputValue;
+                let counted = eval(val);
+                console.log('counted ', counted);
+
+
+                this.inputPlaceholder = counted;
+                this.currentValue = counted;
+                this.inputValue = '';
+
+                this.previousSign = '-';
+              } else {
+                //console.log('what I get ', this.currentValue);
+                this.inputPlaceholder = this.inputValue;
+                this.currentValue = this.inputValue;
+                // this.inputPlaceholder = '';
+                //  console.log( 'before ',this.previousSign);
+                this.inputValue = '';
+                this.previousSign = '-';
+                //  console.log('after ',this.previousSign);
+              }
+
+
+
+
+              // let get = this.history.substring(0, this.history.length - 1)
+              // let count = eval(get); //The eval() function evaluates or executes an argument. works on strings and make shore that the string comes from a trusted source.
+              // console.log(this.history);
+              // console.log(get);
+              // this.inputValue = '',
+              //   this.inputPlaceholder = count;
             }
 
           }, // minusButton
@@ -168,50 +211,101 @@
             this.inputValue = "";
             this.inputPlaceholder = '';
             this.currentValue = '';
+            this.previousSign = '';
+            this.minusSign = 0;
           },
 
           plusButton: function(sign) {
-            //console.log(this.inputValue);
+            console.log(this.previousSign);
+
             if (this.inputValue !== '') {
               if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
 
                 console.log('must be a number');
               } else {
 
+
                 if (sign === '/' || sign === '*') {
                   this.history += this.inputValue + sign;
-                  // this.currentValue += this.inputValue;
-                  this.currentValue = this.history.substring(0, this.history.length - 1);
 
-                  console.log('current ',this.currentValue);
+                  if (this.currentValue !== '') {
+                    let val = this.currentValue + this.previousSign + this.inputValue;
+                    let counted = eval(val);
+                    console.log('counted ', counted);
 
-                  let secondCount = eval(this.currentValue);
+
+                    this.inputPlaceholder = counted;
+                    this.currentValue = counted;
+                    this.inputValue = '';
+
+                    this.previousSign = sign;
+                  } else {
+                    //console.log('what I get ', this.currentValue);
+                    this.inputPlaceholder = this.inputValue;
+                    this.currentValue = this.inputValue;
+                    // this.inputPlaceholder = '';
+                    //  console.log( 'before ',this.previousSign);
+                    this.inputValue = '';
+                    this.previousSign = sign;
+                    //  console.log('after ',this.previousSign);
+                  }
+
+                  //  console.log('current ', this.currentValue);
 
 
-                  this.inputValue = '',
-                  console.log('what I get ',this.currentValue);
-                  this.inputPlaceholder = secondCount;
-                  this.currentValue = secondCount;
-                  // this.inputPlaceholder = '';
 
-                }else if (sign === '+' || sign === '-'){
+
+
+                } else if (sign === '+' || sign === '-') {
                   this.history += this.inputValue + sign;
 
+
+                  if (this.currentValue !== '') {
+                    let val = this.currentValue + this.previousSign + this.inputValue;
+                    let counted = eval(val);
+                    console.log('counted ', counted);
+
+
+                    this.inputPlaceholder = counted;
+                    this.currentValue = counted;
+                    this.inputValue = '',
+
+                    this.previousSign = sign;
+                  } else {
+                    //console.log('what I get ', this.currentValue);
+                    this.inputPlaceholder = this.inputValue;
+                    this.currentValue = this.inputValue;
+                    // this.inputPlaceholder = '';
+                    //  console.log( 'before ',this.previousSign);
+                    this.inputValue = '',
+                    this.previousSign = sign;
+
+                    //  console.log('after ',this.previousSign);
+                  }
+
+                  //  let val = this.history.substring(0, this.history.length - 1) + sign + this.inputValue;
+                  //  let counted = eval(val);
+                  //    console.log('counted ', counted);
+
                   // this.currentValue += this.inputValue;
 
                   // this.inputPlaceholder = '';
 
 
-                  let get = this.history.substring(0, this.history.length - 1)
-                  let count = eval(get);
-                  console.log(this.history);
-                  console.log(get);
-                  console.log(count);
+                //  let get = this.history.substring(0, this.history.length - 1)
+                //  let count = eval(get);
+                  //console.log(this.history);
+                  //console.log(get);
+                  //  console.log(count);
+                  //console.log('what I get ', this.currentValue);
 
-                  this.inputValue = '',
-                  this.inputPlaceholder = count;
-                  this.currentValue = count;
-                  console.log(this.currentValue);
+
+                //  this.inputPlaceholder = count;
+                  //this.currentValue = count;
+                //  console.log('before ', this.previousSign);
+                //  this.previousSign = sign;
+                //  console.log('after ', this.previousSign);
+
                 }
 
               }
@@ -220,17 +314,84 @@
               console.log('no value');
             }
           },
-          equals: function(event) {
 
-            if (true) {
+          keepAdding: function(sign) {
 
+            if (this.inputValue !== '') {
+              if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
+
+                console.log('must be a number');
+              } else {
+
+                this.history += this.inputValue + sign;
+
+                let get = this.history.substring(0, this.history.length - 1)
+                let count = eval(get);
+                console.log(this.history);
+                console.log(get);
+                console.log(count);
+
+                this.inputValue = '',
+                  this.inputPlaceholder = '';
+                //  this.currentValue = count;
+                console.log(this.currentValue);
+              }
+
+
+
+            } else {
+              console.log('no value');
             }
 
-            console.log(event.type);
-            //this.inputValue = split('+')
-            //  this.inputValue = Number(this.inputValue);
-            console.log(this.inputValue);
-            console.log(typeof this.inputValue);
+
+          },
+          equals: function() {
+            if (this.currentValue !== '') {
+              let val = this.currentValue + this.previousSign + this.inputValue;
+              let counted = eval(val);
+              console.log('counted ', counted);
+
+
+              this.inputPlaceholder = counted;
+              this.currentValue = counted;
+              this.history += this.inputValue + ' = ' + counted;
+              this.inputValue = '';
+              this.minusSign = 0;
+
+
+              this.previousSign = '=';
+            } else {
+              //console.log('what I get ', this.currentValue);
+              this.inputPlaceholder = '';
+              this.currentValue = '';
+              // this.inputPlaceholder = '';
+              //  console.log( 'before ',this.previousSign);
+              this.inputValue = '';
+              this.minusSign = 0;
+
+              //this.previousSign = '=';
+              //  console.log('after ',this.previousSign);
+            }
+
+            // if (this.history !== '') {
+            //   this.history += this.inputValue;
+            //   let value = eval(this.history);
+            //   this.history += ' = ' + value;
+            //   this.inputPlaceholder = value;
+            //   this.inputValue = '';
+            //
+            // }
+          },
+          numberButtons:function(num){
+            if (this.previousSign === '=') {
+              this.history = '';
+              this.inputValue = '';
+              this.currentValue = '';
+              this.previousSign = '';
+              this.minusSign = 0;
+            }
+
+            this.inputValue += num;
           }
         } // Methods
       }); // Vue
@@ -253,21 +414,21 @@
         <button @click='clear' type="button" name="button">Clear</button>
       </div>
       <div class="row2">
-        <button @click='inputValue += "1"' class="num" type="button" name="button">1</button>
-        <button @click='inputValue += "2"' class="num" type="button" name="button">2</button>
-        <button @click='inputValue += "3"' class="num" type="button" name="button">3</button>
+        <button @click='numberButtons("1")' class="num" type="button" name="button">1</button>
+        <button @click='numberButtons("2")' class="num" type="button" name="button">2</button>
+        <button @click='numberButtons("3")' class="num" type="button" name="button">3</button>
         <button @click='plusButton("/")' type="button" name="button">&#247;</button>
       </div>
       <div class="row3">
-        <button @click='inputValue += "4"' class="num" type="button" name="button">4</button>
-        <button @click='inputValue += "5"' class="num" type="button" name="button">5</button>
-        <button @click='inputValue += "6"' class="num" type="button" name="button">6</button>
+        <button @click='numberButtons("4")' class="num" type="button" name="button">4</button>
+        <button @click='numberButtons("5")' class="num" type="button" name="button">5</button>
+        <button @click='numberButtons("6")' class="num" type="button" name="button">6</button>
         <button @click='minusButton' type="button" name="button">&#8722;</button>
       </div>
       <div class="row4">
-        <button @click='inputValue += "7"' class="num" type="button" name="button">7</button>
-        <button @click='inputValue += "8"' class="num" type="button" name="button">8</button>
-        <button @click='inputValue += "9"' class="num" type="button" name="button">9</button>
+        <button @click='numberButtons("7")' class="num" type="button" name="button">7</button>
+        <button @click='numberButtons("8")' class="num" type="button" name="button">8</button>
+        <button @click='numberButtons("9")' class="num" type="button" name="button">9</button>
         <button @click='plusButton("*")' type="button" name="button">&#215;</button>
       </div>
       <div class="row4">
