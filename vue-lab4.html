@@ -29,6 +29,12 @@
 
       border-radius: 5px;
     }
+    h1{
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      font-family: arial, sans-serif;
+      color: #606060;
+    }
 
     .num {
       background-color: #f4f4f4;
@@ -77,7 +83,8 @@
           currentValue: '',
           minusSign: 0,
           dotSign: 0,
-          previousSign: ''
+          previousSign: '',
+          results:[]
 
           // plusButton: '+'
 
@@ -181,15 +188,6 @@
                 //  console.log('after ',this.previousSign);
               }
 
-
-
-
-              // let get = this.history.substring(0, this.history.length - 1)
-              // let count = eval(get); //The eval() function evaluates or executes an argument. works on strings and make shore that the string comes from a trusted source.
-              // console.log(this.history);
-              // console.log(get);
-              // this.inputValue = '',
-              //   this.inputPlaceholder = count;
             }
 
           }, // minusButton
@@ -216,7 +214,7 @@
           },
 
           plusButton: function(sign) {
-            console.log(this.previousSign);
+          //  console.log(this.previousSign);
 
             if (this.inputValue !== '') {
               if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
@@ -250,12 +248,6 @@
                     //  console.log('after ',this.previousSign);
                   }
 
-                  //  console.log('current ', this.currentValue);
-
-
-
-
-
                 } else if (sign === '+' || sign === '-') {
                   this.history += this.inputValue + sign;
 
@@ -270,81 +262,120 @@
                     this.currentValue = counted;
                     this.inputValue = '',
 
-                    this.previousSign = sign;
+                      this.previousSign = sign;
                   } else {
-                    //console.log('what I get ', this.currentValue);
+
                     this.inputPlaceholder = this.inputValue;
                     this.currentValue = this.inputValue;
-                    // this.inputPlaceholder = '';
-                    //  console.log( 'before ',this.previousSign);
                     this.inputValue = '',
-                    this.previousSign = sign;
+                      this.previousSign = sign;
 
-                    //  console.log('after ',this.previousSign);
+
                   }
 
-                  //  let val = this.history.substring(0, this.history.length - 1) + sign + this.inputValue;
-                  //  let counted = eval(val);
-                  //    console.log('counted ', counted);
+                } else if (sign === 'pow') {
 
-                  // this.currentValue += this.inputValue;
+                  if (this.currentValue !== '') {
+                    let val = this.currentValue + this.previousSign + this.inputValue;
+                    let counted = eval(val);
 
-                  // this.inputPlaceholder = '';
+                    let powerUp = Math.pow(counted, 2);
 
+                    this.inputPlaceholder = powerUp;
+                    this.currentValue = powerUp;
+                    this.inputValue = '',
+                      this.history = counted + '^2 =' + powerUp;
 
-                //  let get = this.history.substring(0, this.history.length - 1)
-                //  let count = eval(get);
-                  //console.log(this.history);
-                  //console.log(get);
-                  //  console.log(count);
-                  //console.log('what I get ', this.currentValue);
+                    this.previousSign = '=';
+                  } else {
+                    //console.log('what I get ', this.currentValue);
+                    let powerFirst = Math.pow(Number(this.inputValue), 2);
+                    this.inputPlaceholder = powerFirst;
+                    this.currentValue = powerFirst;
+                    // this.inputPlaceholder = '';
+                    //  console.log( 'before ',this.previousSign);
+                    this.history = this.inputValue + '^2 = ' + powerFirst;
+                    this.inputValue = '',
+                      this.previousSign = '=';
+                  }
 
+                }else if (sign === 'root') {
+                  if (this.inputValue < 0 || this.currentValue < 0) {
+                    console.log('negativ values dont work');
+                    this.placeholder = 'Error'
+                    this.inputValue = '';
+                    this.history = '';
 
-                //  this.inputPlaceholder = count;
-                  //this.currentValue = count;
-                //  console.log('before ', this.previousSign);
-                //  this.previousSign = sign;
-                //  console.log('after ', this.previousSign);
+                    this.results.push('Error, a negativ invalid number');
 
+                  }else {
+                    if (this.currentValue !== '') {
+                      let val = this.currentValue + this.previousSign + this.inputValue;
+                      let counted = eval(val);
+
+                      let squere = Math.sqrt(counted);
+
+                      this.inputPlaceholder = squere;
+                      this.currentValue = squere;
+                      this.inputValue = '',
+                      this.history = counted +' =' + squere;
+
+                      this.previousSign = '=';
+                    } else {
+                      //console.log('what I get ', this.currentValue);
+                      let squereFirst = Math.sqrt(Number(this.inputValue));
+                      this.inputPlaceholder = squereFirst;
+                      this.currentValue = squereFirst;
+                      // this.inputPlaceholder = '';
+                      //  console.log( 'before ',this.previousSign);
+                      this.history = this.inputValue +  ' = ' + squereFirst;
+                      this.inputValue = '',
+                      this.previousSign = '=';
+                    }
+
+                  }
+                  Math.sqrt(16);
                 }
 
               }
 
             } else {
+
+
               console.log('no value');
             }
           },
 
-          keepAdding: function(sign) {
-
-            if (this.inputValue !== '') {
-              if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
-
-                console.log('must be a number');
-              } else {
-
-                this.history += this.inputValue + sign;
-
-                let get = this.history.substring(0, this.history.length - 1)
-                let count = eval(get);
-                console.log(this.history);
-                console.log(get);
-                console.log(count);
-
-                this.inputValue = '',
-                  this.inputPlaceholder = '';
-                //  this.currentValue = count;
-                console.log(this.currentValue);
-              }
-
-
-
-            } else {
-              console.log('no value');
-            }
-
-
-          },
+          // keepAdding: function(sign) {
+          //
+          //   if (this.inputValue !== '') {
+          //     if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
+          //
+          //       console.log('must be a number');
+          //     } else {
+          //
+          //       this.history += this.inputValue + sign;
+          //
+          //       let get = this.history.substring(0, this.history.length - 1)
+          //       let count = eval(get);
+          //       console.log(this.history);
+          //       console.log(get);
+          //       console.log(count);
+          //
+          //       this.inputValue = '',
+          //         this.inputPlaceholder = '';
+          //       //  this.currentValue = count;
+          //       console.log(this.currentValue);
+          //     }
+          //
+          //
+          //
+          //   } else {
+          //     console.log('no value');
+          //   }
+          //
+          //
+          // },
           equals: function() {
             if (this.currentValue !== '') {
               let val = this.currentValue + this.previousSign + this.inputValue;
@@ -355,6 +386,8 @@
               this.inputPlaceholder = counted;
               this.currentValue = counted;
               this.history += this.inputValue + ' = ' + counted;
+              let res = this.history;
+              this.results.push(res);
               this.inputValue = '';
               this.minusSign = 0;
 
@@ -382,7 +415,7 @@
             //
             // }
           },
-          numberButtons:function(num){
+          numberButtons: function(num) {
             if (this.previousSign === '=') {
               this.history = '';
               this.inputValue = '';
@@ -408,8 +441,8 @@
 
     <div class="buttonContainer">
       <div class="row1">
-        <button type="button" name="button">&times;&#178;</button>
-        <button type="button" name="button">&#8730;</button>
+        <button @click='plusButton("pow")' type="button" name="button">&times;&#178;</button>
+        <button @click='plusButton("root")' type="button" name="button">&#8730;</button>
         <button type="button" name="button">&#8678;</button>
         <button @click='clear' type="button" name="button">Clear</button>
       </div>
@@ -440,11 +473,11 @@
 
     </div>
 
-    <!-- <button type="button" name="button">x^2</button>
-      <button type="button" name="button">root</button>
-      <br>
-      <button type="button" name="button">clear</button>
-      <button type="button" name="button">=</button> -->
+    <h1>Tidigare uträckningar:</h1>
+    <hr>
+    <p v-for='item in results'>{{item}}</p>
+
+
 
 
   </div>
