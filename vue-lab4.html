@@ -138,20 +138,20 @@
                   return true;
                 }
               } else if (charCode > 47 && charCode < 58) {
-                console.log('true key ', charCode);
+              //  console.log('true key ', charCode);
                 return true;
               } else {
                 evt.preventDefault();
-                console.log('false key ', charCode);
+              //  console.log('false key ', charCode);
               }
             } else {
-              console.log('false key ', charCode);
+            //  console.log('false key ', charCode);
               evt.preventDefault();
             }
           }, // validateNum
 
           minusButton: function() {
-            console.log(this.minusSign);
+          //  console.log(this.minusSign);
             if (this.minusSign === 1 && this.inputValue === '') {
               this.minusSign = 0;
 
@@ -226,7 +226,7 @@
             if (this.inputValue !== '') {
               if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
 
-                console.log('must be a number');
+          //      console.log('must be a number');
               } else {
 
 
@@ -329,7 +329,7 @@
 
                 } else if (sign === 'root') {
                   if (this.inputValue < 0 || this.currentValue < 0) {
-                    console.log('negativ values dont work');
+                  //  console.log('negativ values dont work');
                     this.inputPlaceholder = 'Error'
                     this.inputValue = '';
                     this.history = '';
@@ -390,14 +390,14 @@
                     }
 
                   }
-              
+
                 }
 
               }
 
             } else {
 
-              console.log('no value');
+            //  console.log('no value');
             }
           },
 
