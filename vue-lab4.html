@@ -339,6 +339,8 @@
                     this.results.push('Error, a negativ invalid number');
 
                   } else {
+
+
                     if (this.currentValue !== '') {
                       let val;
                       if (this.previousSign === '+') {
@@ -351,18 +353,29 @@
                         val = Number(this.currentValue) * Number(this.inputValue);
                       }
 
-                      let squere = Math.sqrt(val);
+                      if (val < 0) {
+                        this.inputPlaceholder = 'Error'
+                        this.inputValue = '';
+                        this.history = '';
+                        this.previousSign = '';
+                        this.current = '';
 
-                      this.inputPlaceholder = squere;
-                      this.currentValue = squere;
-                      this.history += this.inputValue;
-                      this.history = '√(' + this.history + ') = ' + squere;
-                      let res = this.history;
-                      this.results.push(res);
-                      this.inputValue = '';
-                      this.minusSign = 0;
+                        this.results.push('Error, number ' + val + ' is a invalid numer for square root');
+                      }else{
+                        let squere = Math.sqrt(val);
 
-                      this.previousSign = '=';
+                        this.inputPlaceholder = squere;
+                        this.currentValue = squere;
+                        this.history += this.inputValue;
+                        this.history = '√(' + this.history + ') = ' + squere;
+                        let res = this.history;
+                        this.results.push(res);
+                        this.inputValue = '';
+                        this.minusSign = 0;
+
+                        this.previousSign = '=';
+                      }
+
                     } else {
 
                       let squereFirst = Math.sqrt(Number(this.inputValue));
@@ -377,7 +390,7 @@
                     }
 
                   }
-                  Math.sqrt(16);
+              
                 }
 
               }
