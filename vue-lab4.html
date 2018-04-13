@@ -29,7 +29,8 @@
 
       border-radius: 5px;
     }
-    h1{
+
+    h1 {
       font-size: 1.5rem;
       margin-top: 1rem;
       font-family: arial, sans-serif;
@@ -84,7 +85,7 @@
           minusSign: 0,
           dotSign: 0,
           previousSign: '',
-          results:[]
+          results: []
 
           // plusButton: '+'
 
@@ -167,25 +168,30 @@
               this.history += this.inputValue + '-';
 
               if (this.currentValue !== '') {
-                let val = this.currentValue + this.previousSign + this.inputValue;
-                let counted = eval(val);
-                console.log('counted ', counted);
+                let val;
+                if (this.previousSign === '+') {
+                  val = Number(this.currentValue) + Number(this.inputValue);
+                } else if (this.previousSign === '-') {
+                  val = Number(this.currentValue) - Number(this.inputValue);
+                } else if (this.previousSign === '/') {
+                  val = Number(this.currentValue) / Number(this.inputValue);
+                } else if (this.previousSign === '*') {
+                  val = Number(this.currentValue) * Number(this.inputValue);
+                }
 
-
-                this.inputPlaceholder = counted;
-                this.currentValue = counted;
+                this.inputPlaceholder = val;
+                this.currentValue = val;
                 this.inputValue = '';
 
                 this.previousSign = '-';
               } else {
-                //console.log('what I get ', this.currentValue);
+
                 this.inputPlaceholder = this.inputValue;
                 this.currentValue = this.inputValue;
-                // this.inputPlaceholder = '';
-                //  console.log( 'before ',this.previousSign);
+
                 this.inputValue = '';
                 this.previousSign = '-';
-                //  console.log('after ',this.previousSign);
+
               }
 
             }
@@ -214,7 +220,7 @@
           },
 
           plusButton: function(sign) {
-          //  console.log(this.previousSign);
+            //  console.log(this.previousSign);
 
             if (this.inputValue !== '') {
               if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
@@ -227,25 +233,30 @@
                   this.history += this.inputValue + sign;
 
                   if (this.currentValue !== '') {
-                    let val = this.currentValue + this.previousSign + this.inputValue;
-                    let counted = eval(val);
-                    console.log('counted ', counted);
+                    let val;
+                    if (this.previousSign === '+') {
+                      val = Number(this.currentValue) + Number(this.inputValue);
+                    } else if (this.previousSign === '-') {
+                      val = Number(this.currentValue) - Number(this.inputValue);
+                    } else if (this.previousSign === '/') {
+                      val = Number(this.currentValue) / Number(this.inputValue);
+                    } else if (this.previousSign === '*') {
+                      val = Number(this.currentValue) * Number(this.inputValue);
+                    }
+
+                  //  console.log('counted ', val);
 
 
-                    this.inputPlaceholder = counted;
-                    this.currentValue = counted;
+                    this.inputPlaceholder = val;
+                    this.currentValue = val;
                     this.inputValue = '';
 
                     this.previousSign = sign;
                   } else {
-                    //console.log('what I get ', this.currentValue);
                     this.inputPlaceholder = this.inputValue;
                     this.currentValue = this.inputValue;
-                    // this.inputPlaceholder = '';
-                    //  console.log( 'before ',this.previousSign);
                     this.inputValue = '';
                     this.previousSign = sign;
-                    //  console.log('after ',this.previousSign);
                   }
 
                 } else if (sign === '+' || sign === '-') {
@@ -253,13 +264,22 @@
 
 
                   if (this.currentValue !== '') {
-                    let val = this.currentValue + this.previousSign + this.inputValue;
-                    let counted = eval(val);
-                    console.log('counted ', counted);
+                    let val;
+                    if (this.previousSign === '+') {
+                      val = Number(this.currentValue) + Number(this.inputValue);
+                    } else if (this.previousSign === '-') {
+                      val = Number(this.currentValue) - Number(this.inputValue);
+                    } else if (this.previousSign === '/') {
+                      val = Number(this.currentValue) / Number(this.inputValue);
+                    } else if (this.previousSign === '*') {
+                      val = Number(this.currentValue) * Number(this.inputValue);
+                    }
+
+                  //  console.log('counted ', val);
 
 
-                    this.inputPlaceholder = counted;
-                    this.currentValue = counted;
+                    this.inputPlaceholder = val;
+                    this.currentValue = val;
                     this.inputValue = '',
 
                       this.previousSign = sign;
@@ -269,68 +289,90 @@
                     this.currentValue = this.inputValue;
                     this.inputValue = '',
                       this.previousSign = sign;
-
-
                   }
 
                 } else if (sign === 'pow') {
 
                   if (this.currentValue !== '') {
-                    let val = this.currentValue + this.previousSign + this.inputValue;
-                    let counted = eval(val);
+                    let val;
+                    if (this.previousSign === '+') {
+                      val = Number(this.currentValue) + Number(this.inputValue);
+                    } else if (this.previousSign === '-') {
+                      val = Number(this.currentValue) - Number(this.inputValue);
+                    } else if (this.previousSign === '/') {
+                      val = Number(this.currentValue) / Number(this.inputValue);
+                    } else if (this.previousSign === '*') {
+                      val = Number(this.currentValue) * Number(this.inputValue);
+                    }
 
-                    let powerUp = Math.pow(counted, 2);
+                    let powerUp = Math.pow(val, 2);
 
                     this.inputPlaceholder = powerUp;
                     this.currentValue = powerUp;
                     this.inputValue = '',
-                      this.history = counted + '^2 =' + powerUp;
+                    this.history = val + '^2 =' + powerUp;
+                    let res = val + '^2 =' + powerUp;
+                    this.results.push(res);
 
                     this.previousSign = '=';
                   } else {
-                    //console.log('what I get ', this.currentValue);
                     let powerFirst = Math.pow(Number(this.inputValue), 2);
                     this.inputPlaceholder = powerFirst;
                     this.currentValue = powerFirst;
-                    // this.inputPlaceholder = '';
-                    //  console.log( 'before ',this.previousSign);
                     this.history = this.inputValue + '^2 = ' + powerFirst;
+                    let res = this.inputValue + '^2 = ' + powerFirst;
+                    this.results.push(res);
                     this.inputValue = '',
-                      this.previousSign = '=';
+                    this.previousSign = '=';
                   }
 
-                }else if (sign === 'root') {
+                } else if (sign === 'root') {
                   if (this.inputValue < 0 || this.currentValue < 0) {
                     console.log('negativ values dont work');
-                    this.placeholder = 'Error'
+                    this.inputPlaceholder = 'Error'
                     this.inputValue = '';
                     this.history = '';
+                    this.previousSign = '';
+                    this.current = '';
 
                     this.results.push('Error, a negativ invalid number');
 
-                  }else {
+                  } else {
                     if (this.currentValue !== '') {
-                      let val = this.currentValue + this.previousSign + this.inputValue;
-                      let counted = eval(val);
+                      let val;
+                      if (this.previousSign === '+') {
+                        val = Number(this.currentValue) + Number(this.inputValue);
+                      } else if (this.previousSign === '-') {
+                        val = Number(this.currentValue) - Number(this.inputValue);
+                      } else if (this.previousSign === '/') {
+                        val = Number(this.currentValue) / Number(this.inputValue);
+                      } else if (this.previousSign === '*') {
+                        val = Number(this.currentValue) * Number(this.inputValue);
+                      }
 
-                      let squere = Math.sqrt(counted);
+                      let squere = Math.sqrt(val);
 
                       this.inputPlaceholder = squere;
                       this.currentValue = squere;
-                      this.inputValue = '',
-                      this.history = counted +' =' + squere;
+                      this.history += this.inputValue;
+                      this.history = '√(' + this.history + ') = ' + squere;
+                      let res = this.history;
+                      this.results.push(res);
+                      this.inputValue = '';
+                      this.minusSign = 0;
 
                       this.previousSign = '=';
                     } else {
-                      //console.log('what I get ', this.currentValue);
+
                       let squereFirst = Math.sqrt(Number(this.inputValue));
                       this.inputPlaceholder = squereFirst;
                       this.currentValue = squereFirst;
-                      // this.inputPlaceholder = '';
-                      //  console.log( 'before ',this.previousSign);
-                      this.history = this.inputValue +  ' = ' + squereFirst;
+                      this.history = this.inputValue;
+                      this.history = '√' + this.history + ' = ' + squereFirst;
+                      let res = this.history;
+                      this.results.push(res);
                       this.inputValue = '',
-                      this.previousSign = '=';
+                        this.previousSign = '=';
                     }
 
                   }
@@ -346,46 +388,23 @@
             }
           },
 
-          // keepAdding: function(sign) {
-          //
-          //   if (this.inputValue !== '') {
-          //     if (this.inputValue.indexOf('-') === 0 && this.inputValue.length === 1) {
-          //
-          //       console.log('must be a number');
-          //     } else {
-          //
-          //       this.history += this.inputValue + sign;
-          //
-          //       let get = this.history.substring(0, this.history.length - 1)
-          //       let count = eval(get);
-          //       console.log(this.history);
-          //       console.log(get);
-          //       console.log(count);
-          //
-          //       this.inputValue = '',
-          //         this.inputPlaceholder = '';
-          //       //  this.currentValue = count;
-          //       console.log(this.currentValue);
-          //     }
-          //
-          //
-          //
-          //   } else {
-          //     console.log('no value');
-          //   }
-          //
-          //
-          // },
           equals: function() {
             if (this.currentValue !== '') {
-              let val = this.currentValue + this.previousSign + this.inputValue;
-              let counted = eval(val);
-              console.log('counted ', counted);
+              let val;
+              if (this.previousSign === '+') {
+                val = Number(this.currentValue) + Number(this.inputValue);
+              } else if (this.previousSign === '-') {
+                val = Number(this.currentValue) - Number(this.inputValue);
+              } else if (this.previousSign === '/') {
+                val = Number(this.currentValue) / Number(this.inputValue);
+              } else if (this.previousSign === '*') {
+                val = Number(this.currentValue) * Number(this.inputValue);
+              }
 
 
-              this.inputPlaceholder = counted;
-              this.currentValue = counted;
-              this.history += this.inputValue + ' = ' + counted;
+              this.inputPlaceholder = val;
+              this.currentValue = val;
+              this.history += this.inputValue + ' = ' + val;
               let res = this.history;
               this.results.push(res);
               this.inputValue = '';
@@ -394,26 +413,15 @@
 
               this.previousSign = '=';
             } else {
-              //console.log('what I get ', this.currentValue);
+
               this.inputPlaceholder = '';
               this.currentValue = '';
-              // this.inputPlaceholder = '';
-              //  console.log( 'before ',this.previousSign);
+
               this.inputValue = '';
               this.minusSign = 0;
 
-              //this.previousSign = '=';
-              //  console.log('after ',this.previousSign);
             }
 
-            // if (this.history !== '') {
-            //   this.history += this.inputValue;
-            //   let value = eval(this.history);
-            //   this.history += ' = ' + value;
-            //   this.inputPlaceholder = value;
-            //   this.inputValue = '';
-            //
-            // }
           },
           numberButtons: function(num) {
             if (this.previousSign === '=') {
@@ -425,6 +433,12 @@
             }
 
             this.inputValue += num;
+          },
+          insertOne:function(){
+            if (this.inputValue !== '') {
+              this.inputValue = this.inputValue.substring(0, this.inputValue.length - 1);
+
+            }
           }
         } // Methods
       }); // Vue
@@ -443,7 +457,7 @@
       <div class="row1">
         <button @click='plusButton("pow")' type="button" name="button">&times;&#178;</button>
         <button @click='plusButton("root")' type="button" name="button">&#8730;</button>
-        <button type="button" name="button">&#8678;</button>
+        <button @click='insertOne' type="button" name="button">&#8678;</button>
         <button @click='clear' type="button" name="button">Clear</button>
       </div>
       <div class="row2">
